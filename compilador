@@ -1,1 +1,45 @@
+import os
 
+# Definiciones de las nuevas palabras clave para las funciones
+keywords = {
+
+    'qawachiy': 'print',
+    'and': 'y',
+    'elif': 'rurasqa',
+    'else': 'hinata',
+    'for': 'hamuq',
+    'if': 'in',
+    'while': 'kutimuy',
+    'with': 'wan',
+    'as': 'kuti',
+    #'int': 'kala',
+    'input': 'yaykuna',
+}
+
+def replace_keywords(linea):
+    linea_nueva = linea
+    for keyword, replacement in keywords.items():
+        linea_nueva = linea_nueva.replace(keyword, replacement)
+    return linea_nueva
+
+# Abrir archivo de entrada
+with open("entrada.txt", "r") as archivo_entrada:
+
+
+    codigo = archivo_entrada.read()
+
+# Reemplazar las nuevas palabras clave
+codigo_modificado = replace_keywords(codigo)
+
+# Escribir el código modificado en un archivo temporal
+with open("temp.py", "w") as archivo_temporal:
+    archivo_temporal.write(codigo_modificado)
+
+# Compilar y ejecutar el código modificado
+comando_compilacion = "python temp.py > salida.txt"
+resultado_compilacion = os.system(comando_compilacion)
+if resultado_compilacion != 0:
+    print("Error al compilar el código.")
+    exit(1)
+
+print("Proceso completado. Puedes revisar el archivo de salida.")

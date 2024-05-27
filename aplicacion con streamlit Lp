@@ -1,1 +1,67 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+st.title('Aplicacion Iris con Streamlit')
+
+st.write('Esta aplicación realiza un análisis exploratorio de datos utilizando el conjunto de datos de Iris.')
+
+# Lectura de datos
+@st.cache_data
+def load_data():
+    data = pd.read_csv('https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv')
+    return data
+
+data = load_data()
+
+# Mostrar los datos
+st.subheader('Datos de Iris')
+st.write(data)
+
+# Resumen de datos
+st.subheader('Resumen de Datos')
+st.write(data.describe())
+
+# Visualización de datos (GRAFICOS)
+st.subheader('Visualización de Datos')
+
+st.write('Gráfico de dispersión (longitud del sépalo vs. longitud del pétalo)')
+fig, ax = plt.subplots()
+sns.scatterplot(data=data, x='sepal_length', y='petal_length', hue='species', ax=ax)
+st.pyplot(fig)
+
+st.write('Histogramas')
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+sns.histplot(data['sepal_length'], kde=True, ax=axes[0, 0])
+sns.histplot(data['sepal_width'], kde=True, ax=axes[0, 1])
+sns.histplot(data['petal_length'], kde=True, ax=axes[1, 0])
+sns.histplot(data['petal_width'], kde=True, ax=axes[1, 1])
+st.pyplot(fig)
+
+st.subheader('Gráfico de Barras')
+st.write('Media de las variables por especie')
+fig, ax = plt.subplots()
+data.groupby('species').mean().plot(kind='bar', ax=ax)
+st.pyplot(fig)
+
+# Técnica estadística: Prueba T de Student
+st.subheader('Prueba T de Student')
+species = data['species'].unique()
+selected_species = st.selectbox('Selecciona una especie:', species)
+other_species = [s for s in species if s != selected_species]
+
+selected_species_data = data[data['species'] == selected_species]['sepal_length']
+other_species_data = data[data['species'] != selected_species]['sepal_length']
+
+t_stat, p_val = stats.ttest_ind(selected_species_data, other_species_data)
+st.write(f'Prueba T entre {selected_species} y otras especies:')
+st.write(f'Estadístico t: {t_stat:.2f}')
+st.write(f'Valor p: {p_val:.4f}')
+
+if p_val < 0.05:
+    st.write('La diferencia es estadísticamente significativa.')
+else:
+    st.write('La diferencia no es estadísticamente significativa.')
 

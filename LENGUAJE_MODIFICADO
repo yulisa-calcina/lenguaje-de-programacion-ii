@@ -1,1 +1,67 @@
+#include <iostream>
+using namespace std;
 
+// Definiciones de los nuevos nombres para las funciones
+#define yaykuna cin
+#define qawachiy cout
+#define tikray switch
+#define tawa_kuchu case
+#define ari if
+#define pakiy break
+#define kutichiy return
+#define para for
+#define chaykama while
+#define nawpaqchasqa default
+#define manachayqa else
+
+// Función para realizar un retiro de la cuenta
+float realizarRetiro(float saldo_actual) {
+    float retiro;
+    qawachiy << "Digite el monto a retirar: ";
+    yaykuna >> retiro;
+    ari (retiro > saldo_actual) {
+        qawachiy << "No cuenta con esa cantidad de dinero en su cuenta." << endl;
+        qawachiy << "Por favor, revise su cuenta y vuelva a intentarlo." << endl;
+    } manachayqa {
+        saldo_actual -= retiro;
+        qawachiy << "Saldo restante en la cuenta: " << saldo_actual << endl;
+    }
+    kutichiy saldo_actual;
+}
+
+int main() {
+    int saldo_inicial = 1000, opc;
+    float extra, saldo = saldo_inicial;
+
+    qawachiy << "\tBienvenido" << endl;
+
+    chaykama (true) {
+        qawachiy << "\n1. Ingresar dinero a la cuenta" << endl;
+        qawachiy << "2. Retirar dinero de la cuenta" << endl;
+        qawachiy << "3. Salir" << endl;
+        qawachiy << "Opción: ";
+        yaykuna >> opc;
+
+        tikray (opc) {
+            tawa_kuchu 1:
+                qawachiy << "Digite el monto a ingresar: ";
+                yaykuna >> extra;
+                saldo += extra;
+                qawachiy << "Nuevo saldo en la cuenta: " << saldo << endl;
+                pakiy;
+
+            tawa_kuchu 2:
+                saldo = realizarRetiro(saldo);
+                pakiy;
+
+            tawa_kuchu 3:
+                qawachiy << "Gracias por usar nuestros servicios. ¡Hasta luego!" << endl;
+                kutichiy 0;
+
+            nawpaqchasqa:
+                qawachiy << "Opción no válida. Por favor, seleccione una opción válida." << endl;
+        }
+    }
+
+    kutichiy 0;
+}
